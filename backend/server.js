@@ -16,6 +16,17 @@ app.get("/something", (req, res, next) => {
     res.send("Thank you for your request. This is our response");
 })
 
+app.get("/api/v1/users", (req, res, next) => {
+    console.log("Request recieved on users endpoint")
+    const users = [
+        {
+            name: "John",
+            surname: "Doe"
+        }
+    ]
+    res.send(JSON.stringify(users));
+})
+
 app.listen(port, () => {
     console.log(`http://127.0.0.1:${port}`);
 })
