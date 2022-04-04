@@ -26,6 +26,7 @@ app.get("/api/v1/users", (req, res, next) => {
     
     res.sendFile(path.join(`${__dirname}/../frontend/users.json`));
 
+
     /* const users = [
         {
             name: "John",
@@ -38,8 +39,34 @@ app.get("/api/v1/users", (req, res, next) => {
             status: "passive"
         }
     ]
-    res.send(JSON.stringify(users)); */
+    res.send(JSON.stringify(users)); */   
 });
+
+//Create 2 new endpoints
+app.get("/api/v1/users/active", (req, res, next) => {
+    fs.readFile("../frontend/users.json", (err, data) => {
+        if (err) {
+            res.send("Something went wrong")
+        } else {
+            const users = JSON.parse(data);
+
+            res.send(users.filter(user => user.status === "active"))
+        }
+    })
+});
+
+app.get("/api/v1/users/passive", (req, res, next) => {
+    fs.readFile("../frontend/users.json", (err, data) => {
+        if (err) {
+            res.send("Something went wrong")
+        } else {
+            const users = JSON.parse(data);
+            res.send(users.filter(user => user.status === "passive"))
+        }
+    })
+
+});
+
 
 app.use('/public', express.static(`${__dirname}/../frontend/public`));
 
