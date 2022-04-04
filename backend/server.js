@@ -42,9 +42,12 @@ app.get("/api/v1/users", (req, res, next) => {
     res.send(JSON.stringify(users)); */   
 });
 
+//Create a variable and store the path to reach the users.json
+const userFile = path.join(`${__dirname}/../frontend/users.json`)
+
 //Create 2 new endpoints
 app.get("/api/v1/users/active", (req, res, next) => {
-    fs.readFile("../frontend/users.json", (err, data) => {
+    fs.readFile(userFile, (err, data) => {
         if (err) {
             res.send("Something went wrong")
         } else {
@@ -56,7 +59,7 @@ app.get("/api/v1/users/active", (req, res, next) => {
 });
 
 app.get("/api/v1/users/passive", (req, res, next) => {
-    fs.readFile("../frontend/users.json", (err, data) => {
+    fs.readFile(userFile, (err, data) => {
         if (err) {
             res.send("Something went wrong")
         } else {
