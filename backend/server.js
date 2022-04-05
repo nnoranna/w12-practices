@@ -5,12 +5,22 @@ const port = 9000;
 
 const app = express();
 
+const fFolder = `${__dirname}/../frontend`
+
+app.use('/public', express.static(`${fFolder}/public`));
+
 //Next: 
 app.get("/", (req, res, next) => {
     /* console.log("Request recieved")
     res.send("Thank you for your request. This is our esponse"); */
     res.sendFile(path.join(`${__dirname}/../frontend/index.html`));
 })
+
+
+app.get("/admin/order-view", (req, res, next) => {
+    res.sendFile(path.join(`${__dirname}/../frontend/index.html`));
+})
+
 
 app.get("/kismacska", (req, res, next) => {
     res.sendFile(path.join(`${__dirname}/../frontend/somefile.json`));
@@ -112,7 +122,7 @@ app.get("/api/v1/users-params/:status", (req, res, next) => {
 }); */
 
 
-app.use('/public', express.static(`${__dirname}/../frontend/public`));
+
 
 
 app.listen(port, () => {
