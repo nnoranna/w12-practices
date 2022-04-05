@@ -12,17 +12,27 @@ const userComponent = ({name, surname}) => {
     `
 }
 
+//Add new user form
 function addUserComponent() {
     return `
         <div>
-            <input type="text" name="firstName" placeholder="First Name">
-            <input type="text" name="surname" placeholder="Surname">
-            <button>Send</button>
+            <input type="text" name="firstName" class="firstName" placeholder="First Name">
+            <input type="text" class="surname" name="surname" placeholder="Surname">
+            <button class="addUser">Send</button>
         </div>
     `
 }
 
+
+
+
 const loadEvent = async () => {
+
+    if (window.location.pathname === "/admin/order-view") {
+        console.log("We are in admin");
+    } else {
+        console.log("We are on the customer platform");
+    }
 
     const result = await parseJSON("/api/v1/users");
     const rootElement = document.getElementById("root");
@@ -35,6 +45,37 @@ const loadEvent = async () => {
         `afterend`, 
         addUserComponent()
     );
+
+    const addNewUser = document.querySelector(".addUser")
+    const firstName = document.querySelector(".firstName")
+    const surname = document.querySelector(".surname")
+
+    addNewUser.addEventListener("click", e => {
+        const userData = {
+            firstName: firstName.value,
+            surname: surname.value
+        };
+
+        fetch("/users/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application.json"
+            },
+            body: JSON.stringify(userData)
+        })
+            .then(async data => {
+                const user = await data.json();
+
+                rootElement.insertAdjacentHTML = ("beforeend",userComponent(user));
+            })
+    })
+
 };
+
+
+
+    
+
+
 
 window.addEventListener("load", loadEvent)
