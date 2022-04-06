@@ -97,6 +97,26 @@ app.get("/api/v1/users-params/:status", (req, res, next) => {
     }) 
 });
 
+//Krsiz kódja
+/*app.get("/api/v1/users/:status", (req, res) => {
+    fs.readFile(`${fFolder}/users.json`, (error, data) => {
+        if (error) {
+            res.send("Problem");
+        } else {
+            if (req.params.status === "active") {
+                const users = JSON.parse(data);
+                res.send(users.filter(user => user.status === "active"));
+            } else if (req.params.status === "passive"){
+                const users = JSON.parse(data);
+                res.send(users.filter(user => user.status === "passive"));
+            } else {
+                res.send(`${req.params.status} is not a valid user status`);
+            }
+        }
+    })
+})*/
+
+
 //Create 2 new endpoints
 /* app.get("/api/v1/users/active", (req, res, next) => {
     fs.readFile(userFile, (err, data) => {
@@ -121,10 +141,30 @@ app.get("/api/v1/users-params/:status", (req, res, next) => {
     })
 }); */
 
+app.post("/users/new", (req, res) => {
+    fs.readFile(`${fFolder}/users.json`, (error, data) => {
+        if (error) {
+            console.log(error);
+            res.send("Error reading users file");
+        } else {
+            const users = JSON.parse(data);
+            console.log(req.body);
+            
+            users.push(req.body);
 
+            fs.writeFile(`${fFolder}/users.json`, JSON.stringify(users), error => {
+                if (error) {
+                    console.log(error);
+                    res.send("Error writing users file");
+                }
+            })
+            res.send(req.body);
+        }
+    })
+})
 
 
 
 app.listen(port, () => {
     console.log(`http://127.0.0.1:${port}`);
-})
+});
